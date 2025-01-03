@@ -4,3 +4,74 @@ GET {{BCMS_Backend_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+//run these calls one after another, do not skip please
+//add category with ID 1
+POST {{BCMS_Backend_HostAddress}}/api/category
+Content-Type: application/json
+
+{
+  "CategoryName":"Fiction Literature",
+  "ParentCategory":null
+}
+###
+//add category with ID 2
+POST {{BCMS_Backend_HostAddress}}/api/category
+Content-Type: application/json
+
+{
+  "CategoryName":"Poems",
+  "ParentCategory":1
+}
+###
+//add category with ID 3
+POST {{BCMS_Backend_HostAddress}}/api/category
+Content-Type: application/json
+
+{
+  "CategoryName":"Novels",
+  "ParentCategory":1
+}
+###
+//add category with ID 4
+POST {{BCMS_Backend_HostAddress}}/api/category
+Content-Type: application/json
+
+{
+  "CategoryName":"textbooks"
+}
+###
+// edit category with ID 4
+PUT {{BCMS_Backend_HostAddress}}/api/category/4
+Content-Type: application/json
+
+{
+  "Id": 4
+  "CategoryName": "Scientific Literature",
+  "ParentCategory":null
+}
+###
+//add category with ID 5
+POST {{BCMS_Backend_HostAddress}}/api/category
+Content-Type: application/json
+
+{
+  "CategoryName": "Programming",
+  "ParentCategory":4
+}
+###
+//add category with ID 6
+POST {{BCMS_Backend_HostAddress}}/api/category
+Content-Type: application/json
+
+{
+  "CategoryName": "Technical",
+  "ParentCategory":4
+}
+###
+DELETE {{BCMS_Backend_HostAddress}}/api/category/6
+
+###
+// now show what categories we have
+GET {{BCMS_Backend_HostAddress}}/api/category/
+
+###

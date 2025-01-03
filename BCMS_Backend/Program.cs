@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// I remove that some day
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -25,8 +26,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+//I want to access configuration of app anywhere
 GlobalSettings.Configuration = app.Configuration;
-InMemoryDatabase.startupInMemoryDatabase();
 app.Run();
-// ahahah this fragment is never reached. Deal with your memory leak. Actually, who cares, app is closing anyway. Garbage collector will collect resources. 
-InMemoryDatabase.finalizeInMemoryDatabase();
