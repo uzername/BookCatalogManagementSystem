@@ -16,7 +16,7 @@ namespace BCMS_Backend.Controllers
         [HttpGet]
         public IEnumerable<Book> Get()
         {
-            return _bookRepository.GetAllAsync().Result;
+            return _bookRepository.GetAllBooksExtended().Result;
         }
         // get single book
         [HttpGet("{id}")]
@@ -37,24 +37,40 @@ namespace BCMS_Backend.Controllers
         }
 
         /// <summary>
-        /// save edits to a book
+        /// save edits of a book entry
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="value"></param>
+        /// <param name="id">not used, id should be specified in 'value' parameter</param>
+        /// <param name="value">new value of Book to save, with target id</param>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Book value)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _bookRepository.UpdateAsync(value);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
         /// delete a book completely, by ID
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">valid id of a book. it should exist.</param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _bookRepository.DeleteByIdAsync(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

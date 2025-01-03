@@ -1,5 +1,5 @@
 @BCMS_Backend_HostAddress = http://localhost:5195
-
+// I remove weather forecast sometime
 GET {{BCMS_Backend_HostAddress}}/weatherforecast/
 Accept: application/json
 
@@ -71,7 +71,87 @@ Content-Type: application/json
 DELETE {{BCMS_Backend_HostAddress}}/api/category/6
 
 ###
+//add category with ID 7 because autoincrement
+POST {{BCMS_Backend_HostAddress}}/api/category
+Content-Type: application/json
+
+{
+  "CategoryName": "Medical",
+  "ParentCategory":4
+}
+
 // now show what categories we have
 GET {{BCMS_Backend_HostAddress}}/api/category/
+
+###
+//add book with ID 1
+POST {{BCMS_Backend_HostAddress}}/api/book
+Content-Type: application/json
+
+{
+  "BookTitle": "Перша невідкладна допомога своїми руками",
+  "BookAuthor": "Д. Габбард",
+  "IdCategory": 1
+}
+###
+// edit category to 7 of book with ID=1
+PUT {{BCMS_Backend_HostAddress}}/api/book
+Content-Type: application/json
+
+{
+  "Id":"1",
+  "BookTitle": "Перша невідкладна допомога своїми руками",
+  "BookAuthor": "Д. Габбард",
+  "IdCategory": 7
+}
+###
+// add book with ID=2
+POST {{BCMS_Backend_HostAddress}}/api/book
+Content-Type: application/json
+
+{
+  "BookTitle": "Чапаев",
+  "BookAuthor": "Д. Фурманов",
+  "IdCategory": 3
+}
+###
+// add book with ID=3
+POST {{BCMS_Backend_HostAddress}}/api/book
+Content-Type: application/json
+
+{
+  "BookTitle": "Poetry",
+  "BookAuthor": "Edgar Poe",
+  "IdCategory": 4
+}
+###
+// add book with ID=4
+POST {{BCMS_Backend_HostAddress}}/api/book
+Content-Type: application/json
+
+{
+  "BookTitle": "Poetry",
+  "BookAuthor": "Тарас Шевченко",
+  "IdCategory": 4
+}
+###
+//delete book with ID=2
+DELETE {{BCMS_Backend_HostAddress}}/api/book/2
+
+###
+// rename book with ID=4
+PUT {{BCMS_Backend_HostAddress}}/api/book
+
+Content-Type: application/json
+
+{
+  "Id":"4",
+  "BookTitle": "Кобзар",
+  "BookAuthor": "Тарас Шевченко",
+  "IdCategory": 4
+}
+###
+// now see which books do we have
+GET {{BCMS_Backend_HostAddress}}/api/book
 
 ###
