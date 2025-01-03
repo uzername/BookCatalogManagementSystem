@@ -1,8 +1,4 @@
 @BCMS_Backend_HostAddress = http://localhost:5195
-// I remove weather forecast sometime
-GET {{BCMS_Backend_HostAddress}}/weatherforecast/
-Accept: application/json
-
 ###
 //run these calls one after another, do not skip please
 //add category with ID 1
