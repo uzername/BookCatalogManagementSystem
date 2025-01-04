@@ -5,7 +5,12 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BCMS_Backend", "BCMS_Backend\BCMS_Backend.csproj", "{FD7E7C4E-2DE2-4709-A5EE-022A36537AB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BCMS_FrontendBlazor", "BCMS_FrontendBlazor\BCMS_FrontendBlazor.csproj", "{65397EA2-807C-4CAA-9278-026981239B79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BCMS_FrontendBlazor", "BCMS_FrontendBlazor\BCMS_FrontendBlazor.csproj", "{65397EA2-807C-4CAA-9278-026981239B79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32BF5940-7596-4E55-A791-520584D78FD4}"
+	ProjectSection(SolutionItems) = preProject
+		README.MD = README.MD
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

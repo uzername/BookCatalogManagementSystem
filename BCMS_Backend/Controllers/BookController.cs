@@ -1,4 +1,5 @@
 ﻿using BCMS_Backend.Entities;
+using BCMS_Backend.Helpers;
 using BCMS_Backend.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,27 @@ namespace BCMS_Backend.Controllers
         // probably I regret using async conjuration wizardry here. Anyway, it's worth trying.
         // for example if something gets bad with Get() I may just remove Task and put Result after GetAllAsync() . . .
         readonly BookRepository _bookRepository = new BookRepository();
-        // get all books
+        /// <summary>
+        /// get all books with their category / genre
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<Book> Get()
         {
             return _bookRepository.GetAllBooksExtended().Result;
+        }
+        /// <summary>
+        /// Special API method for UI. get list of books but prepared to show with pagination and also with filtering applied.
+        /// https://dev.to/drsimplegraffiti/pagination-in-net-api-4opp .
+        /// https://unitcoding.com/filtering-your-web-api-resources/ .
+        /// </summary>
+        /// <param name="controlValues"></param>
+        /// <returns></returns>
+
+        [HttpPost("/forUI")]
+        public PaginatedList<Book> GetBooksWithPaginationAndFiltering([FromBody] QueryParameters controlValues)
+        {
+            return _bookRepository.GetAllBooksExtendedFilteredPagination(controlValues).Result;
         }
         // get single book
         [HttpGet("{id}")]

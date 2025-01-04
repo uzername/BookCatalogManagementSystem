@@ -1,6 +1,9 @@
 ﻿using BCMS_Backend.Entities;
 using BCMS_Backend.Helpers;
 using Dapper;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Text;
 
 namespace BCMS_Backend.Repository
 {
@@ -15,5 +18,73 @@ namespace BCMS_Backend.Repository
             var connection = DatabaseHelper.GetInMemoryDbConnection();
             return connection.QueryAsync<Book>("SELECT  b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, c.ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id ");
         }
+        /// <summary>
+        /// extremely complicated method to get list of items paginated and filtered. It probably requires debugging.
+        /// https://dev.to/drsimplegraffiti/pagination-in-net-api-4opp
+        /// </summary>
+        /// <param name="inParameters"></param>
+        /// <returns></returns>
+        public async Task<PaginatedList<Book>> GetAllBooksExtendedFilteredPagination(QueryParameters inParameters)
+        {
+            bool authorFilterActive = String.IsNullOrEmpty(inParameters.BookAuthorFilter);
+            bool titleFilterActive = String.IsNullOrEmpty(inParameters.BookTitleFilter);
+            bool categoryFilterActive = String.IsNullOrEmpty(inParameters.CategoryFilter);
+            bool onlyOneFilterActive = (authorFilterActive && !titleFilterActive && !categoryFilterActive) || (!authorFilterActive && titleFilterActive && !categoryFilterActive) || (!authorFilterActive && !titleFilterActive && categoryFilterActive);
+            StringBuilder completeQuery = new StringBuilder("SELECT  b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, c.ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id ");
+            List<Object> currentQueryParameters = new List<object>();
+            if (authorFilterActive || titleFilterActive || categoryFilterActive)
+            {
+                bool pleaseAddAND = false;
+                completeQuery.Append(" WHERE ");
+                
+                    if (authorFilterActive)  {
+                        if (onlyOneFilterActive == false)
+                            completeQuery.Append(" ( ");
+                        completeQuery.Append("b.BookAuthor = @AUTHOR");
+                        if (onlyOneFilterActive == false)
+                            completeQuery.Append(" ) ");
+                        pleaseAddAND = true;
+                        currentQueryParameters.Add(inParameters.BookAuthorFilter);
+                    }
+                    if (titleFilterActive)  {
+                        if (pleaseAddAND)  {
+                            completeQuery.Append(" AND ");
+                        }
+                        if (titleFilterActive)  {
+                            if (onlyOneFilterActive == false)
+                                completeQuery.Append(" ( ");
+                            completeQuery.Append("b.BookTitle = @TITLE");
+                            if (onlyOneFilterActive == false)
+                                completeQuery.Append(" ) ");
+                        }
+                        pleaseAddAND = true;
+                        currentQueryParameters.Add(inParameters.BookTitleFilter);
+                    }
+                    if (categoryFilterActive)
+                    {
+                        if (pleaseAddAND)  {
+                            completeQuery.Append(" AND ");
+                        }
+                        if (onlyOneFilterActive == false)
+                            completeQuery.Append(" ( ");
+                        completeQuery.Append("c.CategoryName = @CATEGORY OR c.ParentCategoryName = @CATEGORY");
+                        if (onlyOneFilterActive == false)
+                            completeQuery.Append(" ) ");
+                        currentQueryParameters.Add(inParameters.CategoryFilter);
+                    }
+                
+            }
+            var connection = DatabaseHelper.GetInMemoryDbConnection();
+            IEnumerable<Book> playas;
+            if (authorFilterActive || titleFilterActive || categoryFilterActive)
+                playas = await connection.QueryAsync<Book>(completeQuery.ToString(), currentQueryParameters);
+            else
+                playas = await connection.QueryAsync<Book>(completeQuery.ToString() );
+            var count = playas.Count();
+            var totalPages = (int)Math.Ceiling(count / (double)inParameters.pageSize);
+            var almostDone = playas.Skip((inParameters.pageIndex - 1) * inParameters.pageSize).Take(inParameters.pageSize);
+            return new PaginatedList<Book>(almostDone.AsList(), inParameters.pageIndex, totalPages);
+        }
+
     }
 }
