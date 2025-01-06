@@ -1,7 +1,11 @@
 ﻿using BCMS_Backend.Entities;
 using BCMS_Backend.Helpers;
 using BCMS_Backend.Repository;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 
 namespace BCMS_Backend.Controllers
@@ -34,6 +38,47 @@ namespace BCMS_Backend.Controllers
         public PaginatedList<Book> GetBooksWithPaginationAndFiltering([FromBody] QueryParameters controlValues)
         {
             return _bookRepository.GetAllBooksExtendedFilteredPagination(controlValues).Result;
+        }
+        /// <summary>
+        /// Upload list from CSV file. 
+        /// upload file: https://kenslearningcurve.com/tutorials/upload-files-to-api-with-c-and-net-core/ .
+        /// get data from csv file https://joshclose.github.io/CsvHelper/getting-started/ .
+        /// csv file formatting to consider https://stackoverflow.com/questions/4617935/is-there-a-way-to-include-commas-in-csv-columns-without-breaking-the-formatting .
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("/upload")]
+        public IActionResult Upload()
+        {
+            if (!Request.Form.Files.Any())
+                return Ok();
+            // there may appear exception on every step: File IO error, DB error. I better wrap everything
+            try
+            {
+                // directory where will uploaded file go
+                string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+                if (!Directory.Exists(pathToSave))
+                    Directory.CreateDirectory(pathToSave);
+                IFormFile file = Request.Form.Files[0];
+                string fullPath = Path.Combine(pathToSave, file.FileName);
+                using (FileStream stream = new(fullPath, FileMode.Create))  {
+                    file.CopyTo(stream);
+                }
+                var configCSV = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    HasHeaderRecord = false,
+                };
+                using (StreamReader readStream = new StreamReader(fullPath))  {
+                    using (var csv = new CsvReader(readStream, configCSV))
+                    {
+                        var records = csv.GetRecords<Book>();
+                    }
+                }
+
+                System.IO.File.Delete(fullPath);
+            } catch (Exception ex) { 
+                return BadRequest(ex.Message);
+            }
+            return Ok();
         }
         // get single book
         [HttpGet("{id}")]
