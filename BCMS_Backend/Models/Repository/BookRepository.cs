@@ -31,7 +31,7 @@ namespace BCMS_Backend.Repository
             bool categoryFilterActive = String.IsNullOrEmpty(inParameters.CategoryFilter);
             bool onlyOneFilterActive = (authorFilterActive && !titleFilterActive && !categoryFilterActive) || (!authorFilterActive && titleFilterActive && !categoryFilterActive) || (!authorFilterActive && !titleFilterActive && categoryFilterActive);
             StringBuilder completeQuery = new StringBuilder("SELECT  b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, c.ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id ");
-            List<Object> currentQueryParameters = new List<object>();
+            var dictionaryParameters = new Dictionary<string, object>();
             if (authorFilterActive || titleFilterActive || categoryFilterActive)
             {
                 bool pleaseAddAND = false;
@@ -44,7 +44,7 @@ namespace BCMS_Backend.Repository
                         if (onlyOneFilterActive == false)
                             completeQuery.Append(" ) ");
                         pleaseAddAND = true;
-                        currentQueryParameters.Add(inParameters.BookAuthorFilter);
+                        dictionaryParameters.Add("@AUTHOR", inParameters.BookAuthorFilter);
                     }
                     if (titleFilterActive)  {
                         if (pleaseAddAND)  {
@@ -58,7 +58,7 @@ namespace BCMS_Backend.Repository
                                 completeQuery.Append(" ) ");
                         }
                         pleaseAddAND = true;
-                        currentQueryParameters.Add(inParameters.BookTitleFilter);
+                        dictionaryParameters.Add("@TITLE", inParameters.BookTitleFilter);
                     }
                     if (categoryFilterActive)
                     {
@@ -70,16 +70,19 @@ namespace BCMS_Backend.Repository
                         completeQuery.Append("c.CategoryName = @CATEGORY OR c.ParentCategoryName = @CATEGORY");
                         if (onlyOneFilterActive == false)
                             completeQuery.Append(" ) ");
-                        currentQueryParameters.Add(inParameters.CategoryFilter);
+                        dictionaryParameters.Add("@CATEGORY", inParameters.CategoryFilter);
                     }
                 
             }
             var connection = DatabaseHelper.GetInMemoryDbConnection();
             IEnumerable<Book> playas;
             if (authorFilterActive || titleFilterActive || categoryFilterActive)
+            {
+                var currentQueryParameters = new DynamicParameters(dictionaryParameters);
                 playas = await connection.QueryAsync<Book>(completeQuery.ToString(), currentQueryParameters);
+            }
             else
-                playas = await connection.QueryAsync<Book>(completeQuery.ToString() );
+                playas = await connection.QueryAsync<Book>(completeQuery.ToString());
             var count = playas.Count();
             var totalPages = (int)Math.Ceiling(count / (double)inParameters.pageSize);
             var almostDone = playas.Skip((inParameters.pageIndex - 1) * inParameters.pageSize).Take(inParameters.pageSize);

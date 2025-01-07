@@ -17,6 +17,7 @@ namespace BCMS_Backend.Controllers
         // probably I regret using async conjuration wizardry here. Anyway, it's worth trying.
         // for example if something gets bad with Get() I may just remove Task and put Result after GetAllAsync() . . .
         readonly BookRepository _bookRepository = new BookRepository();
+        readonly CategoryRepository _categoryRepository = new CategoryRepository();
         /// <summary>
         /// get all books with their category / genre
         /// </summary>
@@ -47,7 +48,7 @@ namespace BCMS_Backend.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("/upload")]
-        public IActionResult Upload()
+        public async Task<IActionResult> Upload()
         {
             if (!Request.Form.Files.Any())
                 return Ok();
@@ -67,10 +68,33 @@ namespace BCMS_Backend.Controllers
                 {
                     HasHeaderRecord = false,
                 };
+                List<Book> records = new List<Book> ();
                 using (StreamReader readStream = new StreamReader(fullPath))  {
-                    using (var csv = new CsvReader(readStream, configCSV))
-                    {
-                        var records = csv.GetRecords<Book>();
+                    using (var csv = new CsvReader(readStream, configCSV))  {
+                        records = csv.GetRecords<Book>().ToList();
+                    }
+                    foreach (Book bookFromFile in records)  {
+                        // book without category - skipping. It may cause problems
+                        if (String.IsNullOrEmpty(bookFromFile.CategoryName)) continue;
+                        int? parentCategoryOfBook = null;
+                        if (String.IsNullOrEmpty(bookFromFile.ParentCategoryName) == false)  {
+                            Category foundParentCategory = _categoryRepository.Filter("CategoryName", bookFromFile.ParentCategoryName);
+                            if (foundParentCategory == null)  {
+                                //what could go wrong?
+                                Category newParentCategory = await _categoryRepository.InsertAsync(new Category { CategoryName = bookFromFile.ParentCategoryName, ParentCategory = null }, false);
+                                parentCategoryOfBook = newParentCategory.Id;
+                            }
+                            else  {
+                                parentCategoryOfBook = foundParentCategory?.ParentCategory;
+                            }
+                        }
+                        Category foundActualCategory = await _categoryRepository.FilterByNameAndParentId(bookFromFile.CategoryName, parentCategoryOfBook);
+                        if (foundActualCategory == null)
+                        {
+                            foundActualCategory = await _categoryRepository.InsertAsync(new Category { CategoryName = bookFromFile.CategoryName, ParentCategory = parentCategoryOfBook }, false);
+                        }
+                        // okay, we are done with category mentioned in the record.  now add book
+                        /// TODO _bookRepository.InsertAsync(new Book { BookAuthor = bookFromFile.BookAuthor, BookTitle = bookFromFile.BookTitle, }); ;
                     }
                 }
 
