@@ -28,9 +28,9 @@ namespace BCMS_Backend.Repository
             }
             var parameters = new DynamicParameters(dictionary);
             if (parentCategory != null)
-                return connection.QuerySingleAsync<Category>("SELECT c.CategoryName, c.ParentCategory from category where ParentCategory=@PARENT AND CategoryName = @NAME",parameters);
+                return connection.QuerySingleAsync<Category>("SELECT c.CategoryName, c.ParentCategory from category where ParentCategory=@PARENT AND CategoryName = @NAME", parameters);
             else
-                return connection.QuerySingleAsync<Category>("SELECT c.CategoryName, c.ParentCategory from category where ParentCategory IS NULL AND CategoryName = @NAME", parameters)
+                return connection.QuerySingleAsync<Category>("SELECT c.CategoryName, c.ParentCategory from category where ParentCategory IS NULL AND CategoryName = @NAME", parameters);
         }
     }
 }

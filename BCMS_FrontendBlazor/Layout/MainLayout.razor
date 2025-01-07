@@ -1,12 +1,14 @@
 ﻿@inherits LayoutComponentBase
+@inject IConfiguration configuration
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
 
     <main>
+        <!-- https://dev.to/rasheedmozaffar/how-can-you-add-appsettingsjson-to-a-blazor-webassembly-project-5826 -->
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <a href="@configuration["APIProtocol"]@configuration["APIHost"]:@configuration["APIPort"]" target="_blank">Using API: @configuration["APIProtocol"]@configuration["APIHost"]:@configuration["APIPort"]</a>
         </div>
 
         <article class="content px-4">

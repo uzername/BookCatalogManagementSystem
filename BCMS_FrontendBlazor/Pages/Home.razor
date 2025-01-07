@@ -2,6 +2,38 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Book Catalog Management System</h1>
 
-Welcome to your new app.
+<p>This is a <span class="fw-bold">Book Catalog Management System</span> that allows users to manage and track a collection of books. </p>
+<p>Users should be able to:</p>
+<ul>
+    <li>view the list of books in a table format. </li>
+    <li>search and filter books by title, author, and genre.</li>
+    <li>add new books to the catalog via a form. </li>
+    <li>update book details. </li>
+    <li>delete books from the catalog. </li>
+</ul>
+<p>UI has a responsive design that works seamlessly on both desktop and mobile devices.</p>
+<p>Data won't be persisted because it is stored in memory <br/> 
+ (it was explicitly stated: <span class="font-monospace">Database: In-memory storage</span> ) <br/>
+ But you may Remove everything and Upload from CSV file</p>
+<div class="container">
+    <div class="row">
+        <label for="useFile">Choose a CSV File:</label>
+        <input type="file" id="useFile" name="useFile" accept=".csv"/>
+    </div>
+    <div class="row mx-1">
+         <label class="checkbox-inline"><input type="checkbox" id="removeBooks" name="removeBooks" checked />&nbsp;&nbsp;&nbsp;Remove entered books</label>
+    </div>
+    <div class="row mx-1">
+         <label class="checkbox-inline" ><input type="checkbox" id="removeCategories" name="removeCategories" checked />&nbsp;&nbsp;&nbsp;Remove entered genres</label> 
+    </div>
+    <button class="btn btn-primary" @onclick="UploadFileNow">UPLOAD FILE</button>
+</div>
+@code {
+    // I am sorry, do I write code right into View? Well that is awkward
+    private void UploadFileNow(MouseEventArgs e)
+    {
+        
+    }
+}
