@@ -1,5 +1,8 @@
 ﻿@page "/"
-
+@using System.Text
+@using System.Net.Http
+@inject IConfiguration configuration
+@inject IHttpClientFactory ClientFactory
 <PageTitle>Home</PageTitle>
 
 <h1>Book Catalog Management System</h1>
@@ -32,8 +35,22 @@
 </div>
 @code {
     // I am sorry, do I write code right into View? Well that is awkward
-    private void UploadFileNow(MouseEventArgs e)
+    // https://learn.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-9.0
+    private async void UploadFileNow(MouseEventArgs e)
     {
-        
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.Append(configuration.GetValue<string>("APIProtocol"));
+        apiPath.Append(configuration.GetValue<string>("APIHost"));
+        apiPath.Append(":");
+        apiPath.Append(configuration.GetValue<string>("APIPort"));
+        StringBuilder queryPath = new StringBuilder();
+        queryPath.Append(APIConstantsDef.API_ROOT); queryPath.Append("/");
+        queryPath.Append(APIConstantsDef.API_BOOK); queryPath.Append("/");
+        queryPath.Append(APIConstantsDef.API_BOOK_upload);
+        var request = new HttpRequestMessage(HttpMethod.Get, apiPath.ToString() + "/" + queryPath.ToString());
+        request.Headers.Add("Accept", "application/json");
+        var client = ClientFactory.CreateClient();
+
+        var response = await client.SendAsync(request);
     }
 }
