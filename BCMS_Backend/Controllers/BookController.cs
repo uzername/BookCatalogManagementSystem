@@ -47,7 +47,7 @@ namespace BCMS_Backend.Controllers
         /// csv file formatting to consider https://stackoverflow.com/questions/4617935/is-there-a-way-to-include-commas-in-csv-columns-without-breaking-the-formatting .
         /// </summary>
         /// <returns></returns>
-        [HttpPost("/upload")]
+        [HttpPost("api/[controller]/upload")]
         public async Task<IActionResult> Upload()
         {
             if (!Request.Form.Files.Any())
@@ -144,7 +144,7 @@ namespace BCMS_Backend.Controllers
         /// delete all entries of books
         /// </summary>
         /// <returns>Ok (code 200) normally. BadRequest if something goes wrong. But all should be fine</returns>
-        [HttpDelete("/delall")]
+        [HttpDelete("api/[controller]/delall")]
         public async Task<IActionResult> DeleteAll()
         {
             try

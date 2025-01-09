@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.Extensions.Configuration;
+@inherits LayoutComponentBase
 @inject IConfiguration configuration
 <div class="page">
     <div class="sidebar">
@@ -6,9 +7,9 @@
     </div>
 
     <main>
-        <!-- https://dev.to/rasheedmozaffar/how-can-you-add-appsettingsjson-to-a-blazor-webassembly-project-5826 -->
+        
         <div class="top-row px-4">
-            <a href="@configuration["APIProtocol"]@configuration["APIHost"]:@configuration["APIPort"]" target="_blank">Using API: @configuration["APIProtocol"]@configuration["APIHost"]:@configuration["APIPort"]</a>
+            <a href="@apiPath" target="_blank">Using API: @configuration["APIProtocol"]@configuration["APIHost"]:@configuration["APIPort"]</a>
         </div>
 
         <article class="content px-4">
@@ -16,3 +17,12 @@
         </article>
     </main>
 </div>
+
+@code {
+    //  https://dev.to/rasheedmozaffar/how-can-you-add-appsettingsjson-to-a-blazor-webassembly-project-5826 
+    private String apiPath = "#";
+    protected override void OnInitialized()
+    {
+       apiPath = configuration.GetValue<string>("APIProtocol") + configuration.GetValue<string>("APIHost") + ":" + configuration.GetValue<string>("APIPort");
+    }
+}

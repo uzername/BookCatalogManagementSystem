@@ -63,7 +63,7 @@ namespace BCMS_Backend.Controllers
         /// delete all categories. It may drop exception if some books have this category.
         /// </summary>
         /// <returns>Ok (code 200) normally. BadRequest if something goes wrong like foreign constraint problem</returns>
-        [HttpDelete("/delall")]
+        [HttpDelete("api/[controller]/delall")]
         public async Task<IActionResult> DeleteAll()
         {
             try

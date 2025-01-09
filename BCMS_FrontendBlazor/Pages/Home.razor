@@ -26,11 +26,12 @@
         <input type="file" id="useFile" name="useFile" accept=".csv"/>
     </div>
     <div class="row mx-1">
-        <label class="checkbox-inline"><input type="checkbox" id="removeBooksAndGenres" name="removeBooksAndGenres" bind="@valueRemoveBooksGenres" />&nbsp;&nbsp;&nbsp;Remove entered books and genres</label>
+        <label class="checkbox-inline"> <InputCheckbox @bind-Value="valueRemoveBooksGenres" /> &nbsp;&nbsp;&nbsp;Remove entered books and genres</label>
     </div>
     <button class="btn btn-primary" @onclick="UploadFileNow">UPLOAD FILE</button>
 </div>
 @code {
+    // <input type="checkbox" id="removeBooksAndGenres" name="removeBooksAndGenres" bind="@valueRemoveBooksGenres" />
     bool valueRemoveBooksGenres { get; set; } = true;
     // https://learn.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-9.0
     private async void UploadFileNow(MouseEventArgs e)
