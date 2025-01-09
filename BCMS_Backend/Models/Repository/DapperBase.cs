@@ -74,6 +74,13 @@ namespace BCMS_Backend.Repository
             await connection.ExecuteAsync($"DELETE FROM {typeof(T).Name.ToLower()} WHERE Id=@Id", new { Id = id }).ConfigureAwait(false);
             
         }
+
+        public async Task DeleteAllRecords()
+        {
+            var connection = DatabaseHelper.GetInMemoryDbConnection();
+            await connection.ExecuteAsync($"DELETE FROM {typeof(T).Name.ToLower()} ").ConfigureAwait(false);
+        }
+
         public async Task<T> InsertAsync(T t, bool includeID = true)
         {
             var insertQuery = GenerateInsertQuery(typeof(T), includeID);

@@ -26,15 +26,12 @@
         <input type="file" id="useFile" name="useFile" accept=".csv"/>
     </div>
     <div class="row mx-1">
-         <label class="checkbox-inline"><input type="checkbox" id="removeBooks" name="removeBooks" checked />&nbsp;&nbsp;&nbsp;Remove entered books</label>
-    </div>
-    <div class="row mx-1">
-         <label class="checkbox-inline" ><input type="checkbox" id="removeCategories" name="removeCategories" checked />&nbsp;&nbsp;&nbsp;Remove entered genres</label> 
+        <label class="checkbox-inline"><input type="checkbox" id="removeBooksAndGenres" name="removeBooksAndGenres" bind="@valueRemoveBooksGenres" />&nbsp;&nbsp;&nbsp;Remove entered books and genres</label>
     </div>
     <button class="btn btn-primary" @onclick="UploadFileNow">UPLOAD FILE</button>
 </div>
 @code {
-    // I am sorry, do I write code right into View? Well that is awkward
+    bool valueRemoveBooksGenres { get; set; } = true;
     // https://learn.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-9.0
     private async void UploadFileNow(MouseEventArgs e)
     {
@@ -43,14 +40,32 @@
         apiPath.Append(configuration.GetValue<string>("APIHost"));
         apiPath.Append(":");
         apiPath.Append(configuration.GetValue<string>("APIPort"));
-        StringBuilder queryPath = new StringBuilder();
-        queryPath.Append(APIConstantsDef.API_ROOT); queryPath.Append("/");
-        queryPath.Append(APIConstantsDef.API_BOOK); queryPath.Append("/");
-        queryPath.Append(APIConstantsDef.API_BOOK_upload);
-        var request = new HttpRequestMessage(HttpMethod.Get, apiPath.ToString() + "/" + queryPath.ToString());
-        request.Headers.Add("Accept", "application/json");
+        StringBuilder queryPathUpdate = new StringBuilder();
+        queryPathUpdate.Append(APIConstantsDef.API_ROOT); queryPathUpdate.Append("/");
+        queryPathUpdate.Append(APIConstantsDef.API_BOOK); queryPathUpdate.Append("/");
+        queryPathUpdate.Append(APIConstantsDef.API_BOOK_upload);
         var client = ClientFactory.CreateClient();
+        if (valueRemoveBooksGenres)
+        {
+            StringBuilder queryBooksDelete = new StringBuilder();
+            queryBooksDelete.Append(APIConstantsDef.API_ROOT); queryBooksDelete.Append("/");
+            queryBooksDelete.Append(APIConstantsDef.API_BOOK); queryBooksDelete.Append("/");
+            queryBooksDelete.Append(APIConstantsDef.API_delall);
+            var requestDeleteB = new HttpRequestMessage(HttpMethod.Delete, apiPath.ToString() + "/" + queryBooksDelete.ToString());
+            await client.SendAsync(requestDeleteB);
 
-        var response = await client.SendAsync(request);
+            StringBuilder queryCategoryDelete = new StringBuilder();
+            queryCategoryDelete.Append(APIConstantsDef.API_ROOT); queryCategoryDelete.Append("/");
+            queryCategoryDelete.Append(APIConstantsDef.API_BOOK); queryCategoryDelete.Append("/");
+            queryCategoryDelete.Append(APIConstantsDef.API_delall);
+            var requestDeleteC = new HttpRequestMessage(HttpMethod.Delete, apiPath.ToString() + "/" + queryCategoryDelete.ToString());
+            await client.SendAsync(requestDeleteC);
+        }
+
+        var requestUpload = new HttpRequestMessage(HttpMethod.Get, apiPath.ToString() + "/" + queryPathUpdate.ToString());
+        requestUpload.Headers.Add("Accept", "application/json");
+        
+
+        var response = await client.SendAsync(requestUpload);
     }
 }

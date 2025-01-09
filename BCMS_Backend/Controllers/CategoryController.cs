@@ -59,6 +59,23 @@ namespace BCMS_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// delete all categories. It may drop exception if some books have this category.
+        /// </summary>
+        /// <returns>Ok (code 200) normally. BadRequest if something goes wrong like foreign constraint problem</returns>
+        [HttpDelete("/delall")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            try
+            {
+                await _categoryRepository.DeleteAllRecords();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         /// <summary>
         ///  DELETE category by ID

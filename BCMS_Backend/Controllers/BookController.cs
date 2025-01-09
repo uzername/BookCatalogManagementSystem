@@ -140,7 +140,22 @@ namespace BCMS_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// delete all entries of books
+        /// </summary>
+        /// <returns>Ok (code 200) normally. BadRequest if something goes wrong. But all should be fine</returns>
+        [HttpDelete("/delall")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            try
+            {
+                await _bookRepository.DeleteAllRecords();
+                return Ok();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         /// <summary>
         /// delete a book completely, by ID
         /// </summary>
