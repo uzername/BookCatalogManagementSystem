@@ -23,16 +23,29 @@
 <div class="container">
     <div class="row">
         <label for="useFile">Choose a CSV File:</label>
-        <input type="file" id="useFile" name="useFile" accept=".csv"/>
+        <InputFile OnChange="HandleFileSelected" accept=".csv" />
     </div>
     <div class="row mx-1">
         <label class="checkbox-inline"> <InputCheckbox @bind-Value="valueRemoveBooksGenres" /> &nbsp;&nbsp;&nbsp;Remove entered books and genres</label>
     </div>
     <button class="btn btn-primary" @onclick="UploadFileNow">UPLOAD FILE</button>
 </div>
+<p>@StatusMessage</p>
 @code {
-    // <input type="checkbox" id="removeBooksAndGenres" name="removeBooksAndGenres" bind="@valueRemoveBooksGenres" />
+
+    private IBrowserFile? selectedFile;
+    private string StatusMessage = string.Empty;
+    private bool IsFileSelected => selectedFile != null;
+
     bool valueRemoveBooksGenres { get; set; } = true;
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        StatusMessage = $"Selected file: {selectedFile.Name}";
+    }
+
+
     // https://learn.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-9.0
     private async void UploadFileNow(MouseEventArgs e)
     {
@@ -46,6 +59,7 @@
         queryPathUpdate.Append(APIConstantsDef.API_BOOK); queryPathUpdate.Append("/");
         queryPathUpdate.Append(APIConstantsDef.API_BOOK_upload);
         var client = ClientFactory.CreateClient();
+        // optionally - issue request to cleanup categories and books
         if (valueRemoveBooksGenres)
         {
             StringBuilder queryBooksDelete = new StringBuilder();
@@ -62,11 +76,37 @@
             var requestDeleteC = new HttpRequestMessage(HttpMethod.Delete, apiPath.ToString() + "/" + queryCategoryDelete.ToString());
             await client.SendAsync(requestDeleteC);
         }
+        // now - upload file (something odd happens here)
+        if (selectedFile == null)
+        {
+            StatusMessage = "No file selected.";
+            return;
+        }
+        try
+        {
+            using var content = new MultipartFormDataContent();
+            var streamContent = new StreamContent(selectedFile.OpenReadStream());
+            //streamContent.Headers.ContentType = new MediaTypeHeaderValue(selectedFile.ContentType);
+            content.Add(streamContent, "file", selectedFile.Name);
 
-        var requestUpload = new HttpRequestMessage(HttpMethod.Get, apiPath.ToString() + "/" + queryPathUpdate.ToString());
-        requestUpload.Headers.Add("Accept", "application/json");
+            var httpClient = new HttpClient();
+            string apiEndpoint = apiPath.ToString() + "/" + queryPathUpdate.ToString();
+            var responsee = await httpClient.PostAsync(apiEndpoint, content);
+            StatusMessage = "Sending and processing request should have finished by now";
+            if (responsee.IsSuccessStatusCode)
+            {
+                StatusMessage = "File uploaded successfully!";
+            }
+            else
+            {
+                StatusMessage = $"Failed to upload file. Status code: {responsee.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Error: {ex.Message}";
+        }
+
         
-
-        var response = await client.SendAsync(requestUpload);
     }
 }

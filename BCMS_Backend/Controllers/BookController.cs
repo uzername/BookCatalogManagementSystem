@@ -72,17 +72,20 @@ namespace BCMS_Backend.Controllers
                 }
                 var configCSV = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
-                    HasHeaderRecord = false,
+                    MissingFieldFound = null
                 };
+                
                 List<Book> records = new List<Book> ();
                 using (StreamReader readStream = new StreamReader(fullPath))  {
                     using (var csv = new CsvReader(readStream, configCSV))  {
+                        csv.Context.RegisterClassMap<BookMap>();
                         records = csv.GetRecords<Book>().ToList();
                     }
                     foreach (Book bookFromFile in records)  {
                         // book without category - skipping. It may cause problems
                         if (String.IsNullOrEmpty(bookFromFile.CategoryName)) continue;
                         int? parentCategoryOfBook = null;
+                        // intricate addition of found categories in object from file
                         if (String.IsNullOrEmpty(bookFromFile.ParentCategoryName) == false)  {
                             Category foundParentCategory = _categoryRepository.Filter("CategoryName", bookFromFile.ParentCategoryName);
                             if (foundParentCategory == null)  {
@@ -91,16 +94,17 @@ namespace BCMS_Backend.Controllers
                                 parentCategoryOfBook = newParentCategory.Id;
                             }
                             else  {
-                                parentCategoryOfBook = foundParentCategory?.ParentCategory;
+                                parentCategoryOfBook = foundParentCategory?.Id;
                             }
                         }
-                        Category foundActualCategory = await _categoryRepository.FilterByNameAndParentId(bookFromFile.CategoryName, parentCategoryOfBook);
+                        // locate category by name and parent category
+                        Category? foundActualCategory = _categoryRepository.FilterByNameAndParentId(bookFromFile.CategoryName, parentCategoryOfBook);
                         if (foundActualCategory == null)
                         {
                             foundActualCategory = await _categoryRepository.InsertAsync(new Category { CategoryName = bookFromFile.CategoryName, ParentCategory = parentCategoryOfBook }, false);
                         }
                         // okay, we are done with category mentioned in the record.  now add book
-                        /// TODO _bookRepository.InsertAsync(new Book { BookAuthor = bookFromFile.BookAuthor, BookTitle = bookFromFile.BookTitle, }); ;
+                        await _bookRepository.InsertAsync(new Book { BookAuthor = bookFromFile.BookAuthor, BookTitle = bookFromFile.BookTitle, IdCategory = foundActualCategory.Id }, false); ;
                     }
                 }
 
