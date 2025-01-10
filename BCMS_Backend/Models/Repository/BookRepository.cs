@@ -16,7 +16,7 @@ namespace BCMS_Backend.Repository
         public Task<IEnumerable<Book>> GetAllBooksExtended()
         {
             var connection = DatabaseHelper.GetInMemoryDbConnection();
-            return connection.QueryAsync<Book>("SELECT  b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, c.ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id ");
+            return connection.QueryAsync<Book>("SELECT  b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, c2.CategoryName as ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id LEFT JOIN category c2 on c.ParentCategory=c2.Id ");
         }
         /// <summary>
         /// extremely complicated method to get list of items paginated and filtered. It probably requires debugging.

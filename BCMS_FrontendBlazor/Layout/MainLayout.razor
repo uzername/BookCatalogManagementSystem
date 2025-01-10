@@ -7,7 +7,7 @@
     </div>
 
     <main>
-        
+
         <div class="top-row px-4">
             <a href="@apiPath" target="_blank">Using API: @configuration["APIProtocol"]@configuration["APIHost"]:@configuration["APIPort"]</a>
         </div>
@@ -23,6 +23,7 @@
     private String apiPath = "#";
     protected override void OnInitialized()
     {
-       apiPath = configuration.GetValue<string>("APIProtocol") + configuration.GetValue<string>("APIHost") + ":" + configuration.GetValue<string>("APIPort");
+        apiPath = configuration.GetValue<string>("APIProtocol") + configuration.GetValue<string>("APIHost") + ":" + configuration.GetValue<string>("APIPort");
+        apiPath = apiPath +"/"+ APIConstantsDef.API_ROOT+"/"+APIConstantsDef.API_BOOK+"/"+APIConstantsDef.API_BOOK_about;
     }
 }

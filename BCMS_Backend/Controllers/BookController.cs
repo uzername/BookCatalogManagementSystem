@@ -18,6 +18,11 @@ namespace BCMS_Backend.Controllers
         // for example if something gets bad with Get() I may just remove Task and put Result after GetAllAsync() . . .
         readonly BookRepository _bookRepository = new BookRepository();
         readonly CategoryRepository _categoryRepository = new CategoryRepository();
+        [HttpGet("about")]
+        public string About()
+        {
+            return "This is API and it is meant to be used by another project. Anyway you know that it works";
+        }
         /// <summary>
         /// get all books with their category / genre
         /// </summary>
@@ -31,11 +36,12 @@ namespace BCMS_Backend.Controllers
         /// Special API method for UI. get list of books but prepared to show with pagination and also with filtering applied.
         /// https://dev.to/drsimplegraffiti/pagination-in-net-api-4opp .
         /// https://unitcoding.com/filtering-your-web-api-resources/ .
+        /// it is POST request to transfer all the parameters (many of them)
         /// </summary>
         /// <param name="controlValues"></param>
         /// <returns></returns>
 
-        [HttpPost("/forUI")]
+        [HttpPost("forUI")]
         public PaginatedList<Book> GetBooksWithPaginationAndFiltering([FromBody] QueryParameters controlValues)
         {
             return _bookRepository.GetAllBooksExtendedFilteredPagination(controlValues).Result;
@@ -47,7 +53,7 @@ namespace BCMS_Backend.Controllers
         /// csv file formatting to consider https://stackoverflow.com/questions/4617935/is-there-a-way-to-include-commas-in-csv-columns-without-breaking-the-formatting .
         /// </summary>
         /// <returns></returns>
-        [HttpPost("api/[controller]/upload")]
+        [HttpPost("upload")]
         public async Task<IActionResult> Upload()
         {
             if (!Request.Form.Files.Any())
@@ -144,7 +150,7 @@ namespace BCMS_Backend.Controllers
         /// delete all entries of books
         /// </summary>
         /// <returns>Ok (code 200) normally. BadRequest if something goes wrong. But all should be fine</returns>
-        [HttpDelete("api/[controller]/delall")]
+        [HttpDelete("delall")]
         public async Task<IActionResult> DeleteAll()
         {
             try
