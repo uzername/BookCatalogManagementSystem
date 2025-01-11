@@ -8,6 +8,7 @@
         public static String API_BOOK_upload = "upload";
         public static String API_BOOK_about = "about";
 
+        public static String API_CATEGORY = "category";
         public static String API_delall = "delall";
     }
 }

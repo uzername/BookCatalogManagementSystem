@@ -1,9 +1,51 @@
 ﻿@page "/genres"
+@using System.Net.Http.Json
+@using BCMS_FrontendBlazor.Models
+@using System.Text
+@inject IConfiguration configuration
+@inject IHttpClientFactory ClientFactory
 
 <h3>Genres</h3>
 
-<p>Here is a list of genres and their sub-genres</p>
+<p>Here is a list of genres and their sub-genres.</p>
+<p> It uses MudBlazor <a href="https://mudblazor.com/components/table">Table component</a> by the way. There should be a table with list of all the genres, if you have uploaded csv file </p>
+
+<MudTable Items="@Elements" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Genre Id</MudTh>
+        <MudTh>Genre</MudTh>
+        <MudTh>Parent Genre Id</MudTh>
+        <MudTh>Parent Genre</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+                <MudTd DataLabel="Nr">@context.Id</MudTd>
+                <MudTd DataLabel="Sign">@context.CategoryName</MudTd>
+                <MudTd DataLabel="Name">@context.ParentCategory</MudTd>
+                <MudTd DataLabel="Position">@context.ParentCategoryName</MudTd>
+        </RowTemplate>
+    </MudTable>
+
 
 @code {
+    private bool _hidePosition;
+    private bool _loading;
+    private IEnumerable<Category> Elements = new List<Category>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.Append(configuration.GetValue<string>("APIProtocol"));
+        apiPath.Append(configuration.GetValue<string>("APIHost"));
+        apiPath.Append(":");
+        apiPath.Append(configuration.GetValue<string>("APIPort"));
+        StringBuilder queryPathGET = new StringBuilder();
+        queryPathGET.Append(APIConstantsDef.API_ROOT); queryPathGET.Append("/");
+        queryPathGET.Append(APIConstantsDef.API_CATEGORY);
+
+        var httpClient = new HttpClient();
+        string apiEndpoint = apiPath.ToString() + "/" + queryPathGET.ToString();
+        Elements = await httpClient.GetFromJsonAsync<List<Category>>(apiEndpoint);
+        
+    }
 
 }

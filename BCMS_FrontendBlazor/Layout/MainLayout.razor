@@ -1,6 +1,13 @@
 ﻿@using Microsoft.Extensions.Configuration;
 @inherits LayoutComponentBase
 @inject IConfiguration configuration
+
+@* Required *@
+<MudThemeProvider />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
 <div class="page">
     <div class="sidebar">
         <NavMenu />

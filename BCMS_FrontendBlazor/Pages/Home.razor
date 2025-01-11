@@ -3,6 +3,7 @@
 @using System.Net.Http
 @inject IConfiguration configuration
 @inject IHttpClientFactory ClientFactory
+@inject IJSRuntime JS
 <PageTitle>Home</PageTitle>
 
 <h1>Book Catalog Management System</h1>
@@ -101,6 +102,9 @@
             {
                 StatusMessage = $"Failed to upload file. Status code: {responsee.StatusCode}";
             }
+            // show alert message. imagine doing all that hassle for such trivial action. Blazor is just meme
+            // sometimes it may get skipped for no reason.
+            await JS.InvokeVoidAsync("Alert", StatusMessage);
         }
         catch (Exception ex)
         {

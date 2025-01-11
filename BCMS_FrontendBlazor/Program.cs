@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
 using Microsoft.Extensions.Configuration;
 
 namespace BCMS_FrontendBlazor
@@ -14,6 +15,7 @@ namespace BCMS_FrontendBlazor
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddHttpClient();
+            builder.Services.AddMudServices();
 
             await builder.Build().RunAsync();
         }
