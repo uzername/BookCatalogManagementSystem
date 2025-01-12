@@ -7,13 +7,13 @@ The solution consists of backend and frontend projects. The backend exposes API 
 
 - [x] CRUD operations for book entity. 
 - [x] Support searching and filtering by title, author, and genre. 
-- [ ] Pagination and sorting options. 
-- [ ] Bulk upload functionality to import multiple books from a CSV file.
+- [x] Pagination and sorting options. 
+- [x] Bulk upload functionality to import multiple books from a CSV file.
 - [ ] Special: rate limiting to prevent abuse of the API.
 
 ### Frontend 
-[ ] view the list of books in a table format. 
-[ ] search and filter books by title, author, and genre.
+[x] view the list of books in a table format. 
+[x] search and filter books by title, author, and genre.
 [ ] add new books to the catalog via a form. 
 [ ] update book details. 
 [ ] delete books from the catalog. 

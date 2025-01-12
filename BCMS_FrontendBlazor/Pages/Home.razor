@@ -10,7 +10,8 @@
 
 <p>This is a <span class="fw-bold">Book Catalog Management System</span> that allows users to manage and track a collection of books. </p>
 <p>Users should be able to:</p>
-<ul>
+@* Mud Component tends to reset list style *@
+<ul style="list-style: circle; padding-left: 20px; margin-bottom: 20px;">
     <li>view the list of books in a table format. </li>
     <li>search and filter books by title, author, and genre.</li>
     <li>add new books to the catalog via a form. </li>
@@ -102,7 +103,7 @@
             {
                 StatusMessage = $"Failed to upload file. Status code: {responsee.StatusCode}";
             }
-            // show alert message. imagine doing all that hassle for such trivial action. Blazor is just meme
+            // show alert message. imagine doing all that hassle for such trivial action to show message. Blazor is just meme
             // sometimes it may get skipped for no reason.
             await JS.InvokeVoidAsync("Alert", StatusMessage);
         }

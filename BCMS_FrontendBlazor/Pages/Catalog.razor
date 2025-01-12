@@ -1,8 +1,104 @@
 ﻿@page "/catalog"
+@using System.Net.Http.Json
+@using BCMS_FrontendBlazor.Models
+@using System.Text
+@inject HttpClient httpClient
+@inject IConfiguration configuration
+
 <h3>Book Catalog</h3>
 
-<p> Here is a list of books</p>
+<p> Here is a list of books if <a href="/">you have previously uploaded</a> them from csv file. If you wish to filter then type in value and slam Enter button, it should work I think.</p>
 
+@* Here it is https://mudblazor.com/components/table *@
+
+<MudTable Items="@Elements" Dense="@dense" FixedHeader="true" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Book,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Book List</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<Book, object>(x=>x.Id)">Id</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Book, object>(x=>x.BookAuthor)">Book Author</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Book, object>(x=>x.BookTitle)">Book Title</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Book, object>(x=>x.CategoryName)">Genre</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Book, object>(x=>x.ParentCategoryName)">Parent Genre</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nr">@context.Id</MudTd>
+                <MudTd DataLabel="BookAuthor">@context.BookAuthor</MudTd>
+            <MudTd DataLabel="Name">@context.BookTitle</MudTd>
+                <MudTd DataLabel="CategoryName">@context.CategoryName</MudTd>
+                <MudTd DataLabel="ParentCategoryName">@context.ParentCategoryName</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+
+        <MudPaper Class="pa-2 ma-2" Elevation="3">
+        <div class="container">
+        <div class="row">
+            <div class="col-sm-6">Now Editing: @selectedItem1?.BookAuthor ( @selectedItem1?.BookTitle )</div>
+            <button class="btn btn-primary col-sm-3 mx-2" @onclick="DeleteEntryNow">REMOVE</button>
+            <button class="btn btn-primary col-sm-3 mx-2" @onclick="EditEntryNow">SAVE EDIT</button>
+        </div>
+
+    </div>
+        </MudPaper>
 @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString1 = "";
+    private Book selectedItem1 = null;
+    private HashSet<Book> selectedItems = new HashSet<Book>();
 
+    private IEnumerable<Book> Elements = new List<Book>();
+
+    private async Task fetchElements()
+    {
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.Append(configuration.GetValue<string>("APIProtocol"));
+        apiPath.Append(configuration.GetValue<string>("APIHost"));
+        apiPath.Append(":");
+        apiPath.Append(configuration.GetValue<string>("APIPort"));
+        StringBuilder queryPathGET = new StringBuilder();
+        queryPathGET.Append(APIConstantsDef.API_ROOT); queryPathGET.Append("/");
+        queryPathGET.Append(APIConstantsDef.API_BOOK);
+        string apiEndpoint = apiPath.ToString() + "/" + queryPathGET.ToString();
+        Elements = await httpClient.GetFromJsonAsync<List<Book>>(apiEndpoint);
+    }
+
+    protected override async Task OnInitializedAsync()  {
+        await fetchElements();
+    }
+
+    private bool FilterFunc1(Book element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Book element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.BookAuthor.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.BookTitle.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.CategoryName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.ParentCategoryName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.BookAuthor} {element.BookTitle}".Contains(searchString))
+            return true;
+        return false;
+    }
+    private void DeleteEntryNow(MouseEventArgs e)
+    {
+        
+    }
+    private void EditEntryNow(MouseEventArgs e)
+    {
+        
+    }
 }

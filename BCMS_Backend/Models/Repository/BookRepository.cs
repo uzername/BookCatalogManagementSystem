@@ -16,7 +16,7 @@ namespace BCMS_Backend.Repository
         public Task<IEnumerable<Book>> GetAllBooksExtended()
         {
             var connection = DatabaseHelper.GetInMemoryDbConnection();
-            return connection.QueryAsync<Book>("SELECT  b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, c2.CategoryName as ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id LEFT JOIN category c2 on c.ParentCategory=c2.Id ");
+            return connection.QueryAsync<Book>("SELECT b.Id, b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, c2.CategoryName as ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id LEFT JOIN category c2 on c.ParentCategory=c2.Id ");
         }
         /// <summary>
         /// extremely complicated method to get list of items paginated and filtered. It probably requires debugging.
@@ -30,7 +30,7 @@ namespace BCMS_Backend.Repository
             bool titleFilterActive = String.IsNullOrEmpty(inParameters.BookTitleFilter);
             bool categoryFilterActive = String.IsNullOrEmpty(inParameters.CategoryFilter);
             bool onlyOneFilterActive = (authorFilterActive && !titleFilterActive && !categoryFilterActive) || (!authorFilterActive && titleFilterActive && !categoryFilterActive) || (!authorFilterActive && !titleFilterActive && categoryFilterActive);
-            StringBuilder completeQuery = new StringBuilder("SELECT  b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, c.ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id ");
+            StringBuilder completeQuery = new StringBuilder("SELECT b.Id, b.BookTitle, b.BookAuthor, b.IdCategory, c.CategoryName, d.CategoryName as ParentCategoryName FROM Book b LEFT JOIN category c on b.IdCategory=c.Id LEFT JOIN category d on c.ParentCategory=d.Id");
             var dictionaryParameters = new Dictionary<string, object>();
             if (authorFilterActive || titleFilterActive || categoryFilterActive)
             {
