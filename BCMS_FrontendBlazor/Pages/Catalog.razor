@@ -11,7 +11,7 @@
 
 @* Here it is https://mudblazor.com/components/table *@
 
-<MudTable Items="@Elements" Dense="@dense" FixedHeader="true" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Book,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+<MudTable Items="@Elements" Dense="@dense" FixedHeader="false" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Book,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Book List</MudText>
         <MudSpacer />
@@ -37,16 +37,44 @@
     </MudTable>
 
         <MudPaper Class="pa-2 ma-2" Elevation="3">
-        <div class="container">
-        <div class="row">
-            <div class="col-sm-6">Now Editing: @selectedItem1?.BookAuthor ( @selectedItem1?.BookTitle )</div>
-            <button class="btn btn-primary col-sm-3 mx-2" @onclick="DeleteEntryNow">REMOVE</button>
-            <button class="btn btn-primary col-sm-3 mx-2" @onclick="EditEntryNow">SAVE EDIT</button>
+
+    <div class="container mt-4">
+        <!-- First Row -->
+        <div class="row align-items-center">
+            <div class="col-12 col-md d-flex align-items-center">
+                <span class="me-2">Now editing:</span>
+                <span id="editable-text"></span>
+            </div>
+            <div class="col-12 col-md-auto mt-3 mt-md-0 text-end">
+                <button class="btn btn-danger me-2" @onclick="DeleteEntryNow">DELETE</button>
+                <button class="btn btn-success" @onclick="EditEntryNow">SAVE CHANGES</button>
+            </div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="row m-1 align-items-center">
+            <div class="col-12 col-md-auto">
+                <span>Author:</span>
+            </div>
+            <div class="col-12 col-md">
+                <MudTextField @bind-Value="TextValueAuthor" Label="Enter author name" Variant="Variant.Text"></MudTextField>
+            </div>
+        </div>
+
+        <!-- Third Row -->
+        <div class="row m-1 align-items-center">
+            <div class="col-12 col-md-auto">
+                <span>Book Title:</span>
+            </div>
+            <div class="col-12 col-md">
+                    <MudTextField @bind-Value="TextValueBookTitle" Label="Enter Book Title" Variant="Variant.Text"></MudTextField>
+            </div>
         </div>
 
     </div>
+
         </MudPaper>
-@code {
+    @code {
     private bool dense = false;
     private bool hover = true;
     private bool striped = false;
@@ -56,6 +84,9 @@
     private HashSet<Book> selectedItems = new HashSet<Book>();
 
     private IEnumerable<Book> Elements = new List<Book>();
+
+    public string TextValueAuthor;
+    public string TextValueBookTitle;
 
     private async Task fetchElements()
     {
@@ -93,10 +124,16 @@
             return true;
         return false;
     }
+    /// <summary>
+    /// Delete button Handler
+    /// </summary>
     private void DeleteEntryNow(MouseEventArgs e)
     {
-        
+
     }
+    /// <summary>
+    /// Edit Button Handler
+    /// </summary>
     private void EditEntryNow(MouseEventArgs e)
     {
         
