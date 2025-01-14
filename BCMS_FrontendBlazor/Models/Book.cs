@@ -13,6 +13,13 @@ namespace BCMS_FrontendBlazor.Models
         public int IdCategory { get; set; }
         public string CategoryName { get; set; }
         public string ParentCategoryName { get; set; }
+
+        public override string ToString()
+        {
+            string titlePartial = String.IsNullOrEmpty(BookTitle) ? "..." : BookTitle;
+            string authorPartial = String.IsNullOrEmpty(BookAuthor) ? "Anonymous" : BookAuthor;
+            return $"{titlePartial} ({authorPartial})";
+        }
     }
 
 }

@@ -4,6 +4,7 @@
 @using System.Text
 @inject HttpClient httpClient
 @inject IConfiguration configuration
+@inject IJSRuntime JS
 
 <h3>Book Catalog</h3>
 
@@ -11,7 +12,8 @@
 
 @* Here it is https://mudblazor.com/components/table *@
 
-<MudTable Items="@Elements" Dense="@dense" FixedHeader="false" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Book,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+<MudTable Items="@Elements" Dense="@dense" FixedHeader="false" Hover="@hover" Bordered="@bordered" Striped="@striped" 
+    Filter="new Func<Book,bool>(FilterFunc1)" MultiSelection="false" T="Book" SelectedItemChanged="@onSelectionChangedTable">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Book List</MudText>
         <MudSpacer />
@@ -42,8 +44,8 @@
         <!-- First Row : caption and 2 buttons -->
         <div class="row align-items-center">
             <div class="col-12 col-md d-flex align-items-center">
-                <span class="me-2">Now editing:</span>
-                <span id="editable-text"></span>
+                <span class="me-2">Now editing: </span>
+                <MudText Inline="true">@NowEditingValue</MudText>
             </div>
             <div class="col-12 col-md-auto mt-3 mt-md-0 text-end">
                 <button class="btn btn-danger me-2" @onclick="DeleteEntryNow">DELETE</button>
@@ -57,7 +59,7 @@
                 <span class="font-monospace">Author:&nbsp;&nbsp;&nbsp;&nbsp;</span>
             </div>
             <div class="col-12 col-md">
-                <MudTextField @bind-Value="TextValueAuthor" Label="Enter author name" Variant="Variant.Text"></MudTextField>
+                    <MudTextField @bind-Value="TextValueAuthor" Label="Enter author name" Variant="Variant.Text"></MudTextField>
             </div>
         </div>
 
@@ -74,19 +76,25 @@
         <!-- Fourth row : Category picker -->
         <div class="row m-1 align-items-center">
             <div class="col-12 col-md-auto">
-                <span class="font-monospace">Choose Genre:</span>
+                <span class="font-monospace">Book Genre:</span>
             </div>
             <div class="col-12 col-md">
-
-                <MudSelect @bind-Value="ValueChosenCategory"
-                Label="Genre"
-                Dense="false"
-                Disabled="false"
-                ReadOnly="true"
-                Placeholder="choose genre"
-                HelperText="list of genres and subgenres">
-
-                </MudSelect>
+                    <InputSelect id="genre-select" @bind-Value="ValueChosenCategoryId" class="form-control"> 
+                        @foreach (var genre in ElementsCategories)
+                            {
+                                string genreName = "";
+                                @if (String.IsNullOrEmpty(genre.ParentCategoryName))
+                                {
+                                    genreName = genre.CategoryName;
+                                }
+                                else
+                                {
+                                    genreName = genre.ParentCategoryName +" >> "+ genre.CategoryName;
+                                }
+                                    <option Value="@genre.Id"> @genreName</option>
+                            } 
+                    </InputSelect>
+                
             </div>
         </div>
 
@@ -103,10 +111,21 @@
     private HashSet<Book> selectedItems = new HashSet<Book>();
 
     private IEnumerable<Book> Elements = new List<Book>();
+    private IEnumerable<Category> ElementsCategories = new List<Category>();
 
+    public string NowEditingValue;
     public string TextValueAuthor;
     public string TextValueBookTitle;
-    public Category ValueChosenCategory;
+    public int ValueChosenCategoryId;
+
+    void onSelectionChangedTable(Book selB)
+    {
+        selectedItem1 = selB;
+        NowEditingValue = selB.ToString();
+        TextValueAuthor = selB.BookAuthor;
+        TextValueBookTitle = selB.BookTitle;
+        ValueChosenCategoryId = selB.IdCategory;
+    }
 
     private async Task fetchElements()
     {
@@ -121,8 +140,25 @@
         string apiEndpoint = apiPath.ToString() + "/" + queryPathGET.ToString();
         Elements = await httpClient.GetFromJsonAsync<List<Book>>(apiEndpoint);
     }
+    private async Task fetchCategories()
+    {
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.Append(configuration.GetValue<string>("APIProtocol"));
+        apiPath.Append(configuration.GetValue<string>("APIHost"));
+        apiPath.Append(":");
+        apiPath.Append(configuration.GetValue<string>("APIPort"));
+        StringBuilder queryPathGET = new StringBuilder();
+        queryPathGET.Append(APIConstantsDef.API_ROOT); queryPathGET.Append("/");
+        queryPathGET.Append(APIConstantsDef.API_CATEGORY);
+
+        var httpClient = new HttpClient();
+        string apiEndpoint = apiPath.ToString() + "/" + queryPathGET.ToString();
+        ElementsCategories = await httpClient.GetFromJsonAsync<List<Category>>(apiEndpoint);
+    }
 
     protected override async Task OnInitializedAsync()  {
+        // async await waltz
+        await fetchCategories();
         await fetchElements();
     }
 
@@ -144,18 +180,64 @@
             return true;
         return false;
     }
+
     /// <summary>
     /// Delete button Handler
     /// </summary>
-    private void DeleteEntryNow(MouseEventArgs e)
+    private async Task DeleteEntryNow(MouseEventArgs e)
     {
+        if (selectedItem1 == null)  {
+            await JS.InvokeVoidAsync("Alert", "Please select item to delete");
+            return;
+        }
 
+        // deletion code
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.Append(configuration.GetValue<string>("APIProtocol"));
+        apiPath.Append(configuration.GetValue<string>("APIHost"));
+        apiPath.Append(":");
+        apiPath.Append(configuration.GetValue<string>("APIPort"));
+        StringBuilder queryPathDELETE = new StringBuilder();
+        queryPathDELETE.Append(APIConstantsDef.API_ROOT); queryPathDELETE.Append("/");
+        queryPathDELETE.Append(APIConstantsDef.API_BOOK);
+        string apiEndpoint = apiPath.ToString() + "/" + queryPathDELETE.ToString() +"/"+ selectedItem1.Id.ToString();
+        await httpClient.DeleteAsync(apiEndpoint);
+        // get elements once again
+        await fetchElements();
+        // reset form because element was deleted
+        string prevEditingValue = NowEditingValue;
+        selectedItem1 = null;
+        NowEditingValue = "";
+        TextValueAuthor = "";
+        TextValueBookTitle = "";
+        await JS.InvokeVoidAsync("Alert", $"Deletion of {prevEditingValue} complete");
     }
     /// <summary>
-    /// Edit Button Handler
+    /// Edit Button Handler. Actually it should apply changes
     /// </summary>
-    private void EditEntryNow(MouseEventArgs e)
+    private async Task EditEntryNow(MouseEventArgs e)
     {
-        
+        if (selectedItem1 == null)   {
+            await JS.InvokeVoidAsync("Alert", "Please select item to apply changes");
+            return;
+        }
+        // saving code
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.Append(configuration.GetValue<string>("APIProtocol"));
+        apiPath.Append(configuration.GetValue<string>("APIHost"));
+        apiPath.Append(":");
+        apiPath.Append(configuration.GetValue<string>("APIPort"));
+        StringBuilder queryPathUPDATE = new StringBuilder();
+        queryPathUPDATE.Append(APIConstantsDef.API_ROOT); queryPathUPDATE.Append("/");
+        queryPathUPDATE.Append(APIConstantsDef.API_BOOK);
+        string apiEndpoint = apiPath.ToString() + "/" + queryPathUPDATE.ToString() + "/" + selectedItem1.Id.ToString();
+        Book modifiedBook = new Book { Id = selectedItem1.Id,
+                BookAuthor = selectedItem1.BookAuthor, BookTitle = selectedItem1.BookTitle,
+                CategoryName = selectedItem1.CategoryName, ParentCategoryName = selectedItem1.ParentCategoryName, IdCategory = selectedItem1.IdCategory };
+        modifiedBook.IdCategory = ValueChosenCategoryId;
+        modifiedBook.BookAuthor = TextValueAuthor;
+        modifiedBook.BookTitle = TextValueBookTitle;
+        await httpClient.PutAsJsonAsync(apiEndpoint, modifiedBook);
+
     }
 }
