@@ -26,20 +26,20 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Nr">@context.Id</MudTd>
-                <MudTd DataLabel="BookAuthor">@context.BookAuthor</MudTd>
-            <MudTd DataLabel="Name">@context.BookTitle</MudTd>
-                <MudTd DataLabel="CategoryName">@context.CategoryName</MudTd>
-                <MudTd DataLabel="ParentCategoryName">@context.ParentCategoryName</MudTd>
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager />
-        </PagerContent>
-    </MudTable>
+        <MudTd DataLabel="BookAuthor">@context.BookAuthor</MudTd>
+        <MudTd DataLabel="Name">@context.BookTitle</MudTd>
+        <MudTd DataLabel="CategoryName">@context.CategoryName</MudTd>
+        <MudTd DataLabel="ParentCategoryName">@context.ParentCategoryName</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
 
-        <MudPaper Class="pa-2 ma-2" Elevation="3">
+<MudPaper Class="pa-2 ma-2" Elevation="3">
 
     <div class="container mt-4">
-        <!-- First Row -->
+        <!-- First Row : caption and 2 buttons -->
         <div class="row align-items-center">
             <div class="col-12 col-md d-flex align-items-center">
                 <span class="me-2">Now editing:</span>
@@ -51,30 +51,49 @@
             </div>
         </div>
 
-        <!-- Second Row -->
+        <!-- Second Row : Author -->
         <div class="row m-1 align-items-center">
             <div class="col-12 col-md-auto">
-                <span>Author:</span>
+                <span class="font-monospace">Author:&nbsp;&nbsp;&nbsp;&nbsp;</span>
             </div>
             <div class="col-12 col-md">
                 <MudTextField @bind-Value="TextValueAuthor" Label="Enter author name" Variant="Variant.Text"></MudTextField>
             </div>
         </div>
 
-        <!-- Third Row -->
+        <!-- Third Row : Title -->
         <div class="row m-1 align-items-center">
             <div class="col-12 col-md-auto">
-                <span>Book Title:</span>
+                <span class="font-monospace">Book Title:</span>
             </div>
             <div class="col-12 col-md">
-                    <MudTextField @bind-Value="TextValueBookTitle" Label="Enter Book Title" Variant="Variant.Text"></MudTextField>
+                <MudTextField @bind-Value="TextValueBookTitle" Label="Enter Book Title" Variant="Variant.Text"></MudTextField>
+            </div>
+        </div>
+
+        <!-- Fourth row : Category picker -->
+        <div class="row m-1 align-items-center">
+            <div class="col-12 col-md-auto">
+                <span class="font-monospace">Choose Genre:</span>
+            </div>
+            <div class="col-12 col-md">
+
+                <MudSelect @bind-Value="ValueChosenCategory"
+                Label="Genre"
+                Dense="false"
+                Disabled="false"
+                ReadOnly="true"
+                Placeholder="choose genre"
+                HelperText="list of genres and subgenres">
+
+                </MudSelect>
             </div>
         </div>
 
     </div>
 
-        </MudPaper>
-    @code {
+</MudPaper>
+@code {
     private bool dense = false;
     private bool hover = true;
     private bool striped = false;
@@ -87,6 +106,7 @@
 
     public string TextValueAuthor;
     public string TextValueBookTitle;
+    public Category ValueChosenCategory;
 
     private async Task fetchElements()
     {
