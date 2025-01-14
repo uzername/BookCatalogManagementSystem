@@ -12,13 +12,13 @@ The solution consists of backend and frontend projects. The backend exposes API 
 - [ ] Special: rate limiting to prevent abuse of the API.
 
 ### Frontend 
-[x] view the list of books in a table format. 
-[x] search and filter books by title, author, and genre.
-[ ] add new books to the catalog via a form. 
-[ ] update book details. 
-[ ] delete books from the catalog. 
-[ ] Ensure the UI has a responsive design that works seamlessly on both desktop and mobile devices.
-[ ] Special: implement real-time updates to the book list, allowing the list to refresh automatically when changes are made. 
+- [x] view the list of books in a table format. 
+- [x] search and filter books by title, author, and genre.
+- [ ] add new books to the catalog via a form. 
+- [ ] update book details. 
+- [x] delete books from the catalog. 
+- [x] Ensure the UI has a responsive design that works seamlessly on both desktop and mobile devices.
+- [ ] Special: implement real-time updates to the book list, allowing the list to refresh automatically when changes are made. 
 
 ### Technologies
 - Backend: C#, ASP.NET Core Minimal API
