@@ -101,3 +101,63 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+/* https://stackoverflow.com/questions/4465923/a-href-link-for-entire-div-in-html-css */
+a.cover-link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.mybtn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    min-width: 100px;
+}
+
+    .mybtn:hover {
+        color: black;
+        background-color: #e6e6e6;
+        border-color: #adadad;
+    }
+
+.greenbtn {
+    background-color: rgb(134,191,25);
+    border-color: rgb(134,191,25);
+    color: whitesmoke;
+}
+
+    .greenbtn:hover {
+        color: whitesmoke;
+        background-color: rgb(134,191,25);
+    }
+
+.div-regularbackbtn {
+    width: 150px;
+    height: 50px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+}

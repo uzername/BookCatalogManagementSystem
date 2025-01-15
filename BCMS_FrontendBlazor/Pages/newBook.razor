@@ -1,0 +1,100 @@
+﻿@page "/NewBook"
+@using System.Net.Http.Json
+@using BCMS_FrontendBlazor.Models
+@using System.Text
+@inject HttpClient httpClient
+@inject IConfiguration configuration
+@inject IJSRuntime JS
+
+<h3>Add New Book entry</h3>
+<p>I made separate page to add new book because <a href="catalog">Catalog page with all books</a> already had a lot of items on it and it is easy to get lost on that page so let it be here. </p>
+<P> Anyway, most programs have separate "list" page and separate page to add new entry </P>
+<MudPaper Class="pa-2 ma-2" Elevation="3">
+
+    <div class="container mt-4">
+        <!-- First Row : caption and 2 buttons -->
+        <div class="row align-items-center">
+            <div class="col-12 col-md d-flex align-items-center">
+                <span class="me-2">Add new entry for books list here: </span>
+                
+            </div>
+        </div>
+
+        <!-- Second Row : Author -->
+        <div class="row m-1 align-items-center">
+            <div class="col-12 col-md-auto">
+                <span class="font-monospace">Author:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </div>
+            <div class="col-12 col-md">
+                    <MudTextField @bind-Value="TextValueAuthor" Label="Enter author name" Variant="Variant.Text"></MudTextField>
+            </div>
+        </div>
+
+        <!-- Third Row : Title -->
+        <div class="row m-1 align-items-center">
+            <div class="col-12 col-md-auto">
+                <span class="font-monospace">Book Title:</span>
+            </div>
+            <div class="col-12 col-md">
+                <MudTextField @bind-Value="TextValueBookTitle" Label="Enter Book Title" Variant="Variant.Text"></MudTextField>
+            </div>
+        </div>
+
+        <!-- Fourth row : Category picker -->
+        <div class="row m-1 align-items-center">
+            <div class="col-12 col-md-auto">
+                <span class="font-monospace">Book Genre:</span>
+            </div>
+            <div class="col-12 col-md">
+                    <InputSelect id="genre-select" @bind-Value="ValueChosenCategoryId" class="form-control"> 
+                        @foreach (var genre in ElementsCategories)
+                            {
+                                string genreName = "";
+                                @if (String.IsNullOrEmpty(genre.ParentCategoryName))
+                                {
+                                    genreName = genre.CategoryName;
+                                }
+                                else
+                                {
+                                    genreName = genre.ParentCategoryName +" >> "+ genre.CategoryName;
+                                }
+                                    <option Value="@genre.Id"> @genreName</option>
+                            } 
+                    </InputSelect>
+                
+            </div>
+        </div>
+
+        <!--Fifth row with buttons-->
+
+    </div>
+    </MudPaper>
+@code {
+        public string TextValueAuthor;
+        public string TextValueBookTitle;
+        public int ValueChosenCategoryId;
+
+        private IEnumerable<Category> ElementsCategories = new List<Category>();
+
+        private async Task fetchCategories()
+        {
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.Append(configuration.GetValue<string>("APIProtocol"));
+        apiPath.Append(configuration.GetValue<string>("APIHost"));
+        apiPath.Append(":");
+        apiPath.Append(configuration.GetValue<string>("APIPort"));
+        StringBuilder queryPathGET = new StringBuilder();
+        queryPathGET.Append(APIConstantsDef.API_ROOT); queryPathGET.Append("/");
+        queryPathGET.Append(APIConstantsDef.API_CATEGORY);
+
+        var httpClient = new HttpClient();
+        string apiEndpoint = apiPath.ToString() + "/" + queryPathGET.ToString();
+        ElementsCategories = await httpClient.GetFromJsonAsync<List<Category>>(apiEndpoint);
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+        // async await waltz
+        await fetchCategories();
+        }
+}
