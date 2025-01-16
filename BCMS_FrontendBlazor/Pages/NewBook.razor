@@ -2,17 +2,19 @@
 @using System.Net.Http.Json
 @using BCMS_FrontendBlazor.Models
 @using System.Text
+@using Microsoft.AspNetCore.Components.Web
 @inject HttpClient httpClient
 @inject IConfiguration configuration
 @inject IJSRuntime JS
+@inject NavigationManager Navigation
 
 <h3>Add New Book entry</h3>
 <p>I made separate page to add new book because <a href="catalog">Catalog page with all books</a> already had a lot of items on it and it is easy to get lost on that page so let it be here. </p>
-<P> Anyway, most programs have separate "list" page and separate page to add new entry </P>
+<p> Anyway, most programs have separate "list" page and separate page to add new entry </p>
 <MudPaper Class="pa-2 ma-2" Elevation="3">
 
     <div class="container mt-4">
-        <!-- First Row : caption and 2 buttons -->
+        <!-- First Row : caption without 2 buttons -->
         <div class="row align-items-center">
             <div class="col-12 col-md d-flex align-items-center">
                 <span class="me-2">Add new entry for books list here: </span>
@@ -65,19 +67,26 @@
             </div>
         </div>
 
-        <!--Fifth row with buttons-->
+        <!--Fifth row without caption but with buttons-->
+
+        <div class="row align-items-center">
+                <div class="col-12 col-md-auto mt-3 mt-md-0 text-end">
+                    <button class="btn btn-danger me-2" @onclick="CancelEntryNow">CANCEL AND RETURN</button>
+                    <button class="btn btn-success" @onclick="SaveEntryNow">SAVE CHANGES</button>
+                </div>
+        </div>
 
     </div>
     </MudPaper>
 @code {
-        public string TextValueAuthor;
-        public string TextValueBookTitle;
-        public int ValueChosenCategoryId;
+    public string TextValueAuthor;
+    public string TextValueBookTitle;
+    public int ValueChosenCategoryId;
 
-        private IEnumerable<Category> ElementsCategories = new List<Category>();
+    private IEnumerable<Category> ElementsCategories = new List<Category>();
 
-        private async Task fetchCategories()
-        {
+    private async Task fetchCategories()
+    {
         StringBuilder apiPath = new StringBuilder();
         apiPath.Append(configuration.GetValue<string>("APIProtocol"));
         apiPath.Append(configuration.GetValue<string>("APIHost"));
@@ -90,11 +99,42 @@
         var httpClient = new HttpClient();
         string apiEndpoint = apiPath.ToString() + "/" + queryPathGET.ToString();
         ElementsCategories = await httpClient.GetFromJsonAsync<List<Category>>(apiEndpoint);
-        }
+    }
 
-        protected override async Task OnInitializedAsync()
-        {
-        // async await waltz
+    protected override async Task OnInitializedAsync()
+    {
         await fetchCategories();
+    }
+
+    private void CancelEntryNow(MouseEventArgs e) {
+        Navigation.NavigateTo("catalog");
+    }
+
+    private async Task SaveEntryNow(MouseEventArgs e) {
+        if (String.IsNullOrEmpty(TextValueAuthor) || String.IsNullOrEmpty(TextValueBookTitle))  {
+            await JS.InvokeVoidAsync("Alert", "Please enter book author and book title");
+            return;
         }
+        if (ElementsCategories.Count() == 0)
+        {
+            await JS.InvokeVoidAsync("Alert", "There are no categories listed, that may be wrong. Consider loading data from csv file");
+            return;
+        }
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.Append(configuration.GetValue<string>("APIProtocol"));
+        apiPath.Append(configuration.GetValue<string>("APIHost"));
+        apiPath.Append(":");
+        apiPath.Append(configuration.GetValue<string>("APIPort"));
+        StringBuilder queryPathPOST = new StringBuilder();
+        queryPathPOST.Append(APIConstantsDef.API_ROOT); queryPathPOST.Append("/");
+        queryPathPOST.Append(APIConstantsDef.API_BOOK);
+
+        string apiEndpoint = apiPath.ToString() + "/" + queryPathPOST.ToString();
+        Book newBook = new Book { BookAuthor = TextValueAuthor, BookTitle = TextValueBookTitle, IdCategory = ValueChosenCategoryId, CategoryName="", ParentCategoryName=""};
+        await httpClient.PostAsJsonAsync(apiEndpoint, newBook);
+        // return back to catalog page. 
+        Navigation.NavigateTo("catalog");
+    }
+    // I think, catalog page could use some more GET parameters to fit filters after usage, and this page could save parameters of filter and then upon loading catalog page those parameters could be restored
+    // it may be not needed though . . .
 }
