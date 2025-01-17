@@ -1,0 +1,53 @@
+﻿BookAuthor,BookTitle,CategoryName,ParentCategoryName
+Austen Jane, Pride and Prejudice,Novels,Fiction Literature
+Melville Herman, Moby-Dick,Novels,Fiction Literature
+Tolstoy Leo, War and Peace,Novels,Fiction Literature
+Fitzgerald Scott, The Great Gatsby,Novels,Fiction Literature
+Dostoevsky Fyodor, Crime and Punishment,Novels,Fiction Literature
+Hemingway Ernest, The Old Man And The Sea,Novels,Fiction Literature
+Lee Harper, To Kill a Mockingbird,Novels,Fiction Literature
+Bronte Emily, Wuthering Heights,Novels,Fiction Literature
+Shelley Mary, Frankenstein,Novels,Fiction Literature
+Salinger, The Catcher in the Rye,Novels,Fiction Literature
+Whitman Walt, Leaves of Grass,Poetry,Fiction Literature
+Dickinson Emily, The Complete Poems of Emily Dickinson,Poetry,Fiction Literature
+Frost Robert, North of Boston,Poetry,Fiction Literature
+Plath Sylvia, Ariel,Poetry,Fiction Literature
+Eliot, The Waste Land,Poetry,Fiction Literature
+Yeats William Butler, The Tower,Poetry,Fiction Literature
+Keats John, Poems Published in 1820,Poetry,Fiction Literature
+Blake William, Songs of Innocence and Experience,Poetry,Fiction Literature
+Hughes Langston, The Weary Blues,Poetry,Fiction Literature
+Browning Robert, Men and Women,Poetry,Fiction Literature
+Shevchenko Taras, The Artist,Novels,Fiction Literature
+Shevchenko Taras, Kobzar,Poetry,Fiction Literature
+Pushkin Alexander, Poems and Ballads,Poetry,Fiction Literature
+Franko Ivan, Boa Constrictor,Novels,Fiction Literature
+Kobylianska Olha, The Land,Novels,Fiction Literature
+Pidmohylny Valerian, The City,Novels,Fiction Literature
+Dovzhenko Oleksandr, The Enchanted Desna,Novels,Fiction Literature
+Milne Alan, Winniethe-Pooh,For children,Fiction Literature
+Rowling Joan, Harry Potter and the Philosopher Stone,For children,Fiction Literature
+Lewis Clive Staples,Chronicles of Narnia,For children,Fiction Literature
+Carroll Lewis, Alice in Wonderland,For children,Fiction Literature
+Dahl Roald, Charlie and the Chocolate Factory,For children,Fiction Literature
+Barrie James Matthew, Peter Pan,For children,Fiction Literature
+Jachowicz Stanislaw, Bajki i powiastki,For children,Fiction Literature
+Hubbard James, The survival doctor complete handbook,Medical,Science Books
+Kumar Parveen, Kumar and Clarks Clinical Medicine,Medical,Science Books
+American Red Cross,First Aid CPR AED Participant Manual,Medical,Science Books
+Trott Alexander, Wounds and Lacerations Emergency Care and Closure,Medical,Science Books
+Hamilton Richard,Pocket Pharmacopoeia,Medical,Science Books
+"",Fundamentals of Physics,Textbooks,Science Books
+"",Calculus,Textbooks,Science Books
+Campbell Neil,Biology,Textbooks,Science Books
+"",Principles of Economics,Textbooks,Science Books
+Tanenbaum Andrew,Computer Networks,Textbooks,Science Books
+"Lovygin, Teverovskiy", Modern CNC Machinery,Technical,Science Books
+Haynes John, Haynes Automotive Repair Manual,Technical,Science Books
+Pirsig Robert, Zen and the Art of Motorcycle Maintenance,Technical,Science Books
+Richey Deanna, Home Repair and Maintenance,Technical,Science Books
+Black Deanna Sclar, Auto Repair For Dummies,Technical,Science Books
+Spence William, Home Repair and Improvement,Technical,Science Books
+Duffy James, Modern Automotive Technology,Technical,Science Books
+Kronover R,Fractals,Textbooks,Science Books

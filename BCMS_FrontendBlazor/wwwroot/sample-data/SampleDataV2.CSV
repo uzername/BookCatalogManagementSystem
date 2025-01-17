@@ -1,0 +1,50 @@
+﻿BookAuthor,BookTitle,CategoryName,ParentCategoryName
+Франко Іван,Перехресні стежки,Novels,Fiction Literature
+Франко Іван,Борислав сміється,Novels,Fiction Literature
+"Костенко Ліна, Стус Василь, Симоненко Василь",Поезії,Poetry,Fiction Literature
+Тютюнник Григір,Оповідання,Novels,Fiction Literature
+Шевченко Тарас Григорович,Кобзар,Poetry,Fiction Literature
+Шевченко Тарас Григорович,Балади,Poetry,Fiction Literature
+Берроуз Едгар,Тарзан,Novels,Fiction Literature
+Блок Олександр,Вірші та балади,Poetry,Fiction Literature
+Пушкін Олександр,Євгеній Онєгін,Poetry,Fiction Literature
+Пушкін Олександр,Зібрання творів,Poetry,Fiction Literature
+Фадєєв Олександр,Молода гвардія,Novels,Fiction Literature
+Фурманов Дмитро,Чапаєв,Novels,Fiction Literature
+Лем Станіслав,Кіберіада,Novels,Fiction Literature
+Стругацкі Аркадій и Борис,Пікнік на узбіччі,Novels,Fiction Literature
+По Едгар,Вірші,Poetry,Fiction Literature
+Толстой Лев,Війна і мир,Novels,Fiction Literature
+"","Війна 2022. Есеї, поезія",Novels,Fiction Literature
+Толстой Олексій,Гиперболоїд інженера Гаріна,Novels,Fiction Literature
+Толстой Олексій,Буратино,For children,Fiction Literature
+Носов Микола,Незнайка,For children,Fiction Literature
+Волков Олександр,Чарівник смарагдового міста,For children,Fiction Literature
+Керрол Льюіс,Аліса в Країні Чудес,For children,Fiction Literature
+"",Народні казки,For children,Fiction Literature
+Антуан Де Сент Екзюпері,Маленький принц,For children,Fiction Literature
+Гюго Віктор,Собор Паризької Богоматері,Novels,Fiction Literature
+"Ільф Ілля, Євген Петров",Одесская Плеяда,Novels,Fiction Literature
+Чехов Антон,Собрание сочинений,Novels,Fiction Literature
+Артур Конан Дойл,Шерлок Холмс,Novels,Fiction Literature
+Артур Конан Дойл,Шерлок Холмс Возвращается,Novels,Fiction Literature
+Гоголь Микола,Вечори на хуторі поблизу Диканьки,Novels,Fiction Literature
+Гоголь Микола,Мертві душі,Novels,Fiction Literature
+Стельмах Михайло,Оповідання,Novels,Fiction Literature
+Стельмах Михайло,Щедрий вечір,Novels,Fiction Literature
+Старицький Михайло,Кармелюк,Novels,Fiction Literature
+Старицький Михайло,Поезія,Poetry,Fiction Literature
+Чейз Джеймс,Детектив,Novels,Fiction Literature
+Габбард Джеймс,Перша невідкладна допомога своїми руками,Medical,Science Books
+"",Елементарна фізика,Textbooks,Science Books
+"",Елементарна електротехніка,Textbooks,Science Books
+"",Елементарна хімія,Textbooks,Science Books
+Стрюк Микола,Ремонт автомобіля ЗАЗ968,Technical,Science Books
+Барановський Микола,Ремонт,Technical,Science Books
+Маловічко Анатолій,Застуда,Medical,Science Books
+Озерова Віра,Ехінацея в лікуванні,Medical,Science Books
+Корзунова Алевтина,Ехінацея,Medical,Science Books
+"",Перша медична допомога при ДТП,Medical,Science Books
+"",Підручник з водіння автомобіля,Textbooks,Science Books
+"",Підручник з будови автомобіля,Textbooks,Science Books
+Орлов Анатолій,Будова двигунів внутрішнього згорання,Technical,Science Books

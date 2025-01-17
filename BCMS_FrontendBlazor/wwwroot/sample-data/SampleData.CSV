@@ -1,0 +1,48 @@
+﻿BookAuthor,BookTitle,CategoryName,ParentCategoryName
+Іван Франко,Перехресні стежки,Novels,Fiction Literature
+Іван Франко,Борислав сміється,Novels,Fiction Literature
+"Ліна Костенко, Василь Стус, Василь Симоненко",Поезії,Poetry,Fiction Literature
+Григір Тютюнник,Оповідання,Novels,Fiction Literature
+Тарас Григорович Шевченко,Кобзар,Poetry,Fiction Literature
+Тарас Григорович Шевченко,Балади,Poetry,Fiction Literature
+Едгар Берроуз,Тарзан,Novels,Fiction Literature
+Олександр Блок,Вірші та балади,Poetry,Fiction Literature
+Олександр Пушкін,Євгеній Онєгін,Poetry,Fiction Literature
+Олександр Пушкін,Зібрання творів,Poetry,Fiction Literature
+Олександр Фадєєв,Молода гвардія,Novels,Fiction Literature
+Дмитро Фурманов,Чапаєв,Novels,Fiction Literature
+Станіслав Лем,Кіберіада,Novels,Fiction Literature
+Аркадій и Борис Стругацкі,Пікнік на узбіччі,Novels,Fiction Literature
+Едгар По,Вірші,Poetry,Fiction Literature
+Лев Толстой,Війна і мир,Novels,Fiction Literature
+"","Війна 2022. Есеї, поезія",Novels,Fiction Literature
+Олексій Толстой,Гиперболоїд інженера Гаріна,Novels,Fiction Literature
+Олексій Толстой,Буратино,For children,Fiction Literature
+Микола Носов,Незнайка,For children,Fiction Literature
+Олександр Волков,Чарівник смарагдового міста,For children,Fiction Literature
+"",Народні казки,For children,Fiction Literature
+Антуан Де Сент Екзюпері,Маленький принц,For children,Fiction Literature
+Віктор Гюго,Собор Паризької Богоматері,Novels,Fiction Literature
+Илья Ильф и Евгений Петров,Одесская Плеяда,Novels,Fiction Literature
+Антон Чехов,Собрание сочинений,Novels,Fiction Literature
+Артур Конан Дойл,Шерлок Холмс,Novels,Fiction Literature
+Артур Конан Дойл,Шерлок Холмс Возвращается,Novels,Fiction Literature
+Микола Гоголь,Вечори на хуторі поблизу Диканьки,Novels,Fiction Literature
+Микола Гоголь,Мертві душі,Novels,Fiction Literature
+Михайло Стельмах,Оповідання,Novels,Fiction Literature
+Михайло Старицький,Кармелюк,Novels,Fiction Literature
+Михайло Старицький,Поезія,Poetry,Fiction Literature
+Джеймс Чейз,Детектив,Novels,Fiction Literature
+Джеймс Габбард,Перша невідкладна допомога своїми руками,Medical,Science Books
+"",Елементарна фізика,Textbooks,Science Books
+"",Елементарна електротехніка,Textbooks,Science Books
+"",Елементарна хімія,Textbooks,Science Books
+Микола Стрюк,Ремонт автомобіля ЗАЗ968,Technical,Science Books
+Микола Барановський,Ремонт,Technical,Science Books
+Анатолій Маловічко,Застуда,Medical,Science Books
+Віра Озерова,Ехінацея в лікуванні,Medical,Science Books
+Алевтина Корзунова,Ехінацея,Medical,Science Books
+"",Перша медична допомога при ДТП,Medical,Science Books
+"",Підручник з водіння автомобіля,Textbooks,Science Books
+"",Підручник з будови автомобіля,Textbooks,Science Books
+Анатолій Орлов,Будова двигунів внутрішнього згорання,Technical,Science Books

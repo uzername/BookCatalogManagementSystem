@@ -19,6 +19,14 @@
     <li>delete books from the catalog. </li>
 </ul>
 <p>UI has a responsive design that works seamlessly on both desktop and mobile devices.</p>
+<p>
+    CSV file should contain such first row: <span class="font-monospace">BookAuthor,BookTitle,CategoryName,ParentCategoryName</span> and next rows contain data. Here is a sample data for testing:
+    <ul style="list-style: square; padding-left: 15px; margin-bottom: 10px;">
+        <li><a href="sample-data/SampleData.CSV">original dataset in Ukrainian designed to test some cases</a> </li>
+        <li><a href="sample-data/SampleDataV2.CSV">modified dataset in Ukrainian to test sorting</a></li>
+        <li><a href="sample-data/SampleDataENG.CSV">dataset in English (obtained by the help of ChatGPT)</a> </li>
+    </ul>
+</p>
 <p>Data won't be persisted because it is stored in memory <br/> 
  (it was explicitly stated: <span class="font-monospace">Database: In-memory storage</span> ) <br/>
  But you may Remove everything and Upload from CSV file</p>
