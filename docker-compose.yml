@@ -1,0 +1,30 @@
+﻿version: '3.4'
+
+name: book-management-system
+services:
+  apiserver:
+    build:
+      context: .
+      dockerfile: ./BCMS_Backend/Dockerfile
+    ports:
+      - "5195:5195"
+    networks:
+      - app_network
+   
+  blazorclient:
+    build:
+      context: .
+      dockerfile: ./BCMS_FrontendBlazor/Dockerfile
+    ports:
+      - "7164:7164"
+    networks:
+      - app_network
+    depends_on:
+      - apiserver
+    environment:
+      - API_BASE_URL=http://localhost:7164
+
+
+networks:
+  app_network:
+    driver: bridge

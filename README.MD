@@ -24,7 +24,7 @@ The solution consists of backend and frontend projects. The backend exposes API 
 - Backend: C#, ASP.NET Core Minimal API
 - Frontend: Blazor WebAssembly
 - Database: In-memory storage
-- ~~Containerization: Docker, Docker Compose~~ Something went wrong with Docker, but I add those builds
+- ~~Containerization: Docker, Docker Compose~~ ~~Something went wrong with Docker~~ I add those builds to Release section
 
 ### Run API
 
@@ -64,6 +64,12 @@ Setting up npm and node is a separate challenge.
 Here `path/to/release` is where you unpacked BCMS_FrontendBlazor
 
 Anyway, a project should be available at http://localhost:7164 .
+
+## Experimental - run Docker
+
+A friend (and ChatGPT) helped me to come with Docker implementation, it is just there
+Run docker-compose up command
+application may be available at http://localhost:7164/
 
 ## Pictures
 
